@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🚀 GitPulse: Webhook Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: radial-gradient(circle at top left, #1e1e2f, #12121c);
+      color: #fdfdfd;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+    body.light {
+      background: #cceeff;
+      color: #0d1b2a;
+    }
+    header {
+      background: linear-gradient(to right, #00f5a0, #00d9f5);
+      padding: 25px 30px;
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      color: #000;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 2;
+    }
+    .toggle-container {
+      position: absolute;
+      top: 18px;
+      right: 24px;
+      cursor: pointer;
+    }
+    .toggle-container img {
+      width: 40px;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      filter: drop-shadow(0 0 6px yellow);
+    }
+    .toggle-container img:hover {
+      transform: rotate(20deg) scale(1.1);
+    }
+    .cloud, .star {
+      position: absolute;
+      border-radius: 50%;
+      z-index: 0;
+    }
+    .cloud {
+      width: 90px;
+      height: 26px;
+      background: rgba(255,255,255,0.8);
+      top: 100px;
+      left: -100px;
+      animation: cloud 60s linear infinite;
+    }
+    .cloud::before, .cloud::after {
+      content: "";
+      position: absolute;
+      background: inherit;
+      border-radius: inherit;
+    }
+    .cloud::before { width: 50px; height: 20px; top: -10px; left: 30px; }
+    .cloud::after { width: 40px; height: 18px; top: 10px; left: 10px; }
+    @keyframes cloud {
+      to { transform: translateX(200vw); }
+    }
+    .star {
+      width: 3px;
+      height: 3px;
+      background: white;
+      opacity: 0.8;
+      animation: twinkle 2s infinite alternate ease-in-out;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.2; }
+      to { opacity: 1; }
+    }
+    .stars-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      position: relative;
+      z-index: 1;
+    }
+    .filters button {
+      font-family: 'Orbitron', sans-serif;
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(145deg, #0077ff, #00d4ff);
+      color: white;
+      transition: all 0.3s ease;
+    }
+    .filters button:hover {
+      background: linear-gradient(145deg, #ff008c, #ffb347);
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .filters button.active {
+      background: linear-gradient(145deg, #39ff14, #0ff);
+      color: #000;
+      box-shadow: 0 0 15px #39ff14;
+    }
+    ul#events {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+    }
+    ul#events li {
+      background-color: #ffffff8e;
+      border-radius: 12px;
+      padding: 16px 24px;
+      margin: 12px 0;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      border-left: 4px solid #00ffe1;
+      color: #111;
+    }
+    body.light ul#events li {
+      background-color: #ffffff;
+      border-left-color: #0099cc;
+      color: #0d1b2a;
+    }
+    .timestamp {
+      font-size: 0.85rem;
+      color: #555;
+      margin-top: 6px;
+    }
+    body.light .timestamp {
+      color: #333;
+    }
+    @media (max-width: 600px) {
+      .filters {
+        flex-direction: column;
+        align-items: center;
+      }
+      ul#events li {
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cloud" style="top:100px;animation-delay:-10s;"></div>
+  <div class="cloud" style="top:200px;animation-delay:-30s;opacity:.6;"></div>
+
+  <div class="stars-container">
+    <script>
+      for (let i = 0; i < 80; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        star.style.top = Math.random() * 100 + 'vh';
+        star.style.left = Math.random() * 100 + 'vw';
+        star.style.animationDelay = (Math.random() * 2).toFixed(1) + 's';
+        document.currentScript.parentElement.appendChild(star);
+      }
+    </script>
+  </div>
+
+  <header>
+    🚀 GitPulse Webhook Feed
+    <div class="toggle-container" onclick="toggleTheme()">
+      <img src="https://img.icons8.com/emoji/48/000000/light-bulb-emoji.png" alt="Toggle Theme" />
+    </div>
+  </header>
+
+  <div class="filters">
+    <button data-type="all" onclick="filterEvents('all')">ALL (0)</button>
+    <button data-type="push" onclick="filterEvents('push')">PUSH (0)</button>
+    <button data-type="pull_request" onclick="filterEvents('pull_request')">PULL REQUEST (0)</button>
+    <button data-type="merge" onclick="filterEvents('merge')">MERGE (0)</button>
+  </div>
+
+  <ul id="events"></ul>
+
+  <script>
+    let allEvents = [];
+
+    function toggleTheme() {
+      document.body.classList.toggle('light');
+    }
+
+    function updateCounts() {
+      const types = ['all', 'push', 'pull_request', 'merge'];
+      const counts = {
+        all: allEvents.length,
+        push: allEvents.filter(e => e.action === 'push').length,
+        pull_request: allEvents.filter(e => e.action === 'pull_request').length,
+        merge: allEvents.filter(e => e.action === 'merge').length
+      };
+      types.forEach(type => {
+        const btn = document.querySelector(`button[data-type='${type}']`);
+        if (btn) btn.textContent = `${type.replace('_',' ').toUpperCase()} (${counts[type]})`;
+      });
+    }
+
+    async function fetchEvents() {
+      const res = await fetch('/events');
+      const data = await res.json();
+      allEvents = data;
+      updateCounts();
+      renderEvents('all');
+    }
+
+    function filterEvents(type) {
+      document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.filters button[data-type='${type}']`)?.classList.add('active');
+      const filtered = type === 'all' ? allEvents : allEvents.filter(e => e.action === type);
+      render(filtered);
+    }
+
+    function render(events) {
+      const ul = document.getElementById('events');
+      ul.innerHTML = '';
+      if (events.length === 0) {
+        ul.innerHTML = '<li style="opacity:0.6">No events to display.</li>';
+        return;
+      }
+      events.forEach(e => {
+        const li = document.createElement('li');
+        li.setAttribute('data-type', e.action);
+        const istTime = new Date(e.timestamp).toLocaleString('en-IN', {
+          timeZone: 'Asia/Kolkata',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        });
+        let icon = '🚀';
+        if (e.action === 'pull_request') icon = '🔀';
+        else if (e.action === 'merge') icon = '✅';
+        let msg = `${icon} ${e.author}`;
+        if (e.action === 'push') msg += ` pushed to <b>${e.to_branch}</b>`;
+        else if (e.action === 'pull_request') msg += ` opened PR: <b>${e.from_branch}</b> → <b>${e.to_branch}</b>`;
+        else if (e.action === 'merge') msg += ` merged <b>${e.from_branch}</b> → <b>${e.to_branch}</b>`;
+        li.innerHTML = `<div>${msg}</div><div class="timestamp">🕒 ${istTime} (IST)</div>`;
+        ul.appendChild(li);
+      });
+    }
+
+    fetchEvents();
+    setInterval(fetchEvents, 15000);
+  </script>
+</body>
+</html>
