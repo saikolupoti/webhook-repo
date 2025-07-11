@@ -8,8 +8,12 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
+
+MONGO_URI = os.environ.get("MONGO_URI")
+client = MongoClient(MONGO_URI)
+
 # MongoDB Connection URI (ensure password is encoded)
-MONGO_URI = "mongodb+srv://saikolupoti:123%40123Abc@cluster0.7lpbhvp.mongodb.net/?retryWrites=true&w=majority"
+MONGO_URI = "mongodb+srv://saikolupoti:123%40123Abc@cluster0.7lpbhvp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(MONGO_URI)
 db = client["github_events"]
 collection = db["events"]
