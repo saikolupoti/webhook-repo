@@ -2,7 +2,6 @@
 
 **GitPulse** is a real-time dashboard that listens to GitHub webhooks and visually displays push, pull request, and merge events. It’s a simple yet effective way to monitor your repository's activity as it happens.
 
----
 
 ## 📌 Features
 
@@ -16,7 +15,6 @@
 - 🌐 Clean UI with toggleable themes (light/dark)  
 - 🌟 Animated background with stars and clouds for a visual touch  
 
----
 
 ## 🛠 Tech Stack
 
@@ -24,7 +22,7 @@
 - **Database**: MongoDB Atlas  
 - **Frontend**: HTML, CSS, JavaScript  
 
----
+
 
 ## 📤 How It Works
 
@@ -33,7 +31,7 @@
 3. The event is stored in MongoDB.
 4. The frontend fetches new events every 15 seconds and updates the UI.
 
----
+
 
 ## 🔧 Setup Instructions
 
@@ -63,7 +61,7 @@ The frontend is located inside the `/frontend` folder.
 - It fetches events from the `/events` endpoint.
 - Includes filters (**All**, **Push**, **PR**, **Merge**) and a toggleable light/dark theme with animated background.
 
----
+
 
 ## 🚀 Deployment
 
@@ -89,7 +87,7 @@ To deploy frontend:
 }
 ```
 
----
+
 
 ## 📄 API Endpoints
 
@@ -99,13 +97,13 @@ To deploy frontend:
 | `/events`  | GET    | Returns last 10 stored events    |
 | `/`        | GET    | Serves the frontend dashboard    |
 
----
+
 
 ## 📸 Preview
 
 _Replace this with an actual screenshot or recording of your app._
 
----
+
 
 ## ✨ Author
 
