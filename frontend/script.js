@@ -1,10 +1,8 @@
-console.log("✅ script.js is loaded and running");
+const BACKEND_URL = "https://webhook-repo-i33a.onrender.com";
 
 function formatToIST(utcDateString) {
   const date = new Date(utcDateString);
-
-  // Convert to IST (UTC+5:30)
-  const options = {
+  return date.toLocaleString('en-IN', {
     timeZone: 'Asia/Kolkata',
     hour: '2-digit',
     minute: '2-digit',
@@ -12,40 +10,44 @@ function formatToIST(utcDateString) {
     day: 'numeric',
     month: 'short',
     year: 'numeric'
-  };
-
-  return date.toLocaleString('en-IN', options);
+  });
 }
 
 async function fetchEvents() {
   try {
-    const res = await fetch("/events");
-    console.log("📡 /events response status:", res.status);
+    const res = await fetch(`${BACKEND_URL}/events`);
     const events = await res.json();
-    console.log("📦 Events received:", events);
 
     const ul = document.getElementById("events");
     ul.innerHTML = "";
+
+    if (events.length === 0) {
+      ul.innerHTML = `<li style="opacity: 0.6;">No webhook events found.</li>`;
+      return;
+    }
 
     events.forEach(e => {
       const li = document.createElement("li");
       const istTime = formatToIST(e.timestamp);
 
       let message = "";
-
       if (e.action === "push") {
-        message = `${e.author} pushed to ${e.to_branch} on ${istTime} (IST)`;
+        message = `🚀 ${e.author} pushed to <b>${e.to_branch}</b>`;
       } else if (e.action === "pull_request") {
-        message = `${e.author} submitted a pull request from ${e.from_branch} to ${e.to_branch} on ${istTime} (IST)`;
+        message = `🔀 ${e.author} opened PR: <b>${e.from_branch}</b> → <b>${e.to_branch}</b>`;
       } else if (e.action === "merge") {
-        message = `${e.author} merged branch ${e.from_branch} to ${e.to_branch} on ${istTime} (IST)`;
+        message = `✅ ${e.author} merged <b>${e.from_branch}</b> → <b>${e.to_branch}</b>`;
       }
 
-      li.textContent = message;
+      li.innerHTML = `
+        <div>${message}</div>
+        <div class="timestamp">🕒 ${istTime} (IST)</div>
+      `;
+
       ul.appendChild(li);
     });
   } catch (err) {
-    console.error("❌ Failed to fetch events:", err);
+    console.error("Failed to fetch events:", err);
   }
 }
 
