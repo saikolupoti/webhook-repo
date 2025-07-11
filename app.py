@@ -1,3 +1,5 @@
+import os
+MONGO_URI = os.environ.get("MONGO_URI")
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from pymongo import MongoClient
@@ -7,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 # MongoDB Connection URI (ensure password is encoded)
-MONGO_URI = "mongodb+srv://saikolupoti:123%40123Abc@cluster0.7lpbhvp.mongodb.net/?retryWrites=true&w=majority&tls=true&tlsAllowInvalidCertificates=true"
+MONGO_URI = "mongodb+srv://saikolupoti:123%40123Abc@cluster0.7lpbhvp.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(MONGO_URI)
 db = client["github_events"]
 collection = db["events"]
