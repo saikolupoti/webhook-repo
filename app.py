@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 
 # MongoDB Connection URI (ensure password is encoded)
-MONGO_URI = "mongodb+srv://saikolupoti:123%40123Abc@cluster0.7lpbhvp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+MONGO_URI = "mongodb+srv://saikolupoti:123%40123Abc@cluster0.7lpbhvp.mongodb.net/?retryWrites=true&w=majority&tls=true&tlsAllowInvalidCertificates=true"
 client = MongoClient(MONGO_URI)
 db = client["github_events"]
 collection = db["events"]
